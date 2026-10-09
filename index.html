@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EE Quizzer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="bolt">⚡</span> EE Quizzer</div>
+    <div class="topright">
+      <span id="modeBadge" class="badge">Local mode</span>
+      <button id="userBtn" class="chip" title="Change player">👤 <span id="userName">Guest</span></button>
+      <span class="points">★ <b id="pointsTop">0</b> pts</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="screen-home">
+      <div class="stats">
+        <div class="stat"><small>Total points</small><b id="stPoints">0</b></div>
+        <div class="stat good"><small>Correct</small><b id="stCorrect">0</b></div>
+        <div class="stat bad"><small>To retry</small><b id="stWrong">0</b></div>
+        <div class="stat warn"><small>Unanswered</small><b id="stSkipped">0</b></div>
+        <div class="stat"><small>Not tried</small><b id="stNew">0</b></div>
+      </div>
+
+      <div class="card">
+        <h2>Start a quiz</h2>
+        <p class="muted">Pick topics (none selected = all topics).</p>
+        <div id="topics" class="chips"></div>
+
+        <div class="row">
+          <label>Questions
+            <select id="countSel">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+              <option value="all">All</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" id="practiceChk"> Practice mode (show answer &amp; solution right after each question)</label>
+        </div>
+
+        <div class="row buttons">
+          <button id="startBtn" class="btn primary">Start quiz</button>
+          <button id="skippedBtn" class="btn warn">Review unanswered (<span id="skippedCount">0</span>)</button>
+          <button id="wrongBtn" class="btn danger">Retry wrong (<span id="wrongCount">0</span>)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Leaderboard</h2>
+        <div id="board" class="muted">Loading…</div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="screen-quiz" hidden>
+      <div class="card">
+        <div class="qhead">
+          <div id="qmeta" class="muted"></div>
+          <button id="quitBtn" class="link">Quit</button>
+        </div>
+        <div class="bar"><div id="barFill"></div></div>
+        <div id="nav" class="nav"></div>
+        <h3 id="qtext" class="qtext"></h3>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback" hidden></div>
+        <div class="row buttons between">
+          <button id="prevBtn" class="btn">← Previous</button>
+          <button id="nextBtn" class="btn">Next →</button>
+          <button id="finishBtn" class="btn primary">Finish &amp; submit</button>
+        </div>
+        <p class="muted small">Tip: use keys 1–4 or A–D to answer, ← → to move. Unanswered questions are saved so you can come back to them later.</p>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="screen-result" hidden>
+      <div class="card center">
+        <h2>Results</h2>
+        <div class="score"><b id="rScore">0</b><span> / <span id="rTotal">0</span> pts</span></div>
+        <p id="rNew" class="muted"></p>
+        <div class="stats small">
+          <div class="stat good"><small>Correct</small><b id="rCorrect">0</b></div>
+          <div class="stat bad"><small>Wrong</small><b id="rWrong">0</b></div>
+          <div class="stat warn"><small>Unanswered</small><b id="rSkipped">0</b></div>
+        </div>
+        <div class="row buttons center">
+          <button id="rReview" class="btn primary">See answers &amp; solutions</button>
+          <button id="rRetrySkipped" class="btn warn">Answer unanswered now</button>
+          <button id="rHome" class="btn">Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEW -->
+    <section id="screen-review" hidden>
+      <div class="card">
+        <div class="qhead">
+          <h2>Answers &amp; solutions</h2>
+          <button id="revHome" class="link">← Home</button>
+        </div>
+        <div class="tabs" id="revTabs">
+          <button data-f="all" class="tab active">All</button>
+          <button data-f="wrong" class="tab">Wrong</button>
+          <button data-f="unanswered" class="tab">Unanswered</button>
+          <button data-f="correct" class="tab">Correct</button>
+        </div>
+        <div id="revList"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- NAME DIALOG -->
+  <div id="nameModal" class="modal" hidden>
+    <form id="nameForm" class="modal-box">
+      <h2>Who's playing?</h2>
+      <p class="muted">Enter a nickname. Your points and unanswered questions are saved under it.</p>
+      <input id="nameInput" maxlength="24" placeholder="Nickname" autocomplete="off" required>
+      <button class="btn primary" type="submit">Continue</button>
+    </form>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
